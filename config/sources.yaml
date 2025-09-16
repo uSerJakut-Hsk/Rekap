@@ -1,4 +1,5 @@
-# Rekap Threat Intelligence Sources Configuration
+# Rekap Threat Intelligence Sources Configuration - Updated 2025
+# Modern threat feed sources with updated APIs and endpoints
 
 # Data source definitions and update schedules
 sources:
@@ -12,15 +13,18 @@ sources:
       description: "User-submitted threat indicators from security community"
       validation_required: true
       auto_approve: false
+      webhook_endpoint: "https://api.rekap-project.id/v2/submit"
+      rate_limit: "100/hour"
       
     honeypot_network:
       enabled: true
       type: automated
       priority: high
-      update_frequency: "*/15 * * * *"  # Every 15 minutes
+      update_frequency: "*/10 * * * *"  # Every 10 minutes
       description: "Internal honeypot network capturing live threats"
       validation_required: false
       auto_approve: true
+      data_retention: "90 days"
       
     incident_response:
       enabled: true
@@ -29,68 +33,131 @@ sources:
       description: "IOCs extracted from incident response activities"
       validation_required: false
       auto_approve: true
+      integration:
+        jira: true
+        slack: true
+        teams: true
 
-  # External Free Sources
+  # External Free Sources - Updated 2025
   external_free:
     malwarebazaar:
       enabled: true
       url: "https://mb-api.abuse.ch/api/v1/"
       type: api
       priority: high
-      update_frequency: "0 */6 * * *"  # Every 6 hours
+      update_frequency: "0 */4 * * *"  # Every 4 hours
       rate_limit: "1000/day"
       api_key_required: false
       description: "Malware sample repository by abuse.ch"
-      indicators: ["file_hashes", "c2_servers"]
+      indicators: ["file_hashes", "c2_servers", "payloads"]
+      timeout: 30
+      retry_attempts: 3
       
     feodo_tracker:
       enabled: true
       url: "https://feodotracker.abuse.ch/downloads/ipblocklist.csv"
       type: csv_download
       priority: high
-      update_frequency: "0 */4 * * *"  # Every 4 hours
+      update_frequency: "0 */3 * * *"  # Every 3 hours
       description: "Botnet C2 tracking by abuse.ch"
-      indicators: ["malicious_ips"]
+      indicators: ["malicious_ips", "c2_servers"]
+      backup_url: "https://feodotracker.abuse.ch/downloads/ipblocklist_aggressive.csv"
       
     threatfox:
       enabled: true
       url: "https://threatfox-api.abuse.ch/api/v1/"
       type: api
       priority: medium
-      update_frequency: "0 */8 * * *"  # Every 8 hours
+      update_frequency: "0 */6 * * *"  # Every 6 hours
       description: "IOC sharing platform by abuse.ch"
-      indicators: ["iocs", "malware_families"]
+      indicators: ["iocs", "malware_families", "campaigns"]
+      query_params:
+        days: 7
+        limit: 1000
       
     urlhaus:
       enabled: true
       url: "https://urlhaus-api.abuse.ch/v1/"
       type: api
       priority: medium
-      update_frequency: "0 */6 * * *"  # Every 6 hours
+      update_frequency: "0 */4 * * *"  # Every 4 hours
       description: "Malicious URL sharing by abuse.ch"
-      indicators: ["malicious_urls"]
+      indicators: ["malicious_urls", "payloads"]
+      
+    phishtank:
+      enabled: true
+      url: "https://data.phishtank.com/data/online-valid.json"
+      type: json_download
+      priority: medium
+      update_frequency: "0 */2 * * *"  # Every 2 hours
+      description: "Community-driven anti-phishing service"
+      indicators: ["phishing_urls"]
+      
+    emergingthreats:
+      enabled: true
+      url: "https://rules.emergingthreats.net/fwrules/"
+      type: rule_download
+      priority: medium
+      update_frequency: "0 8 * * *"  # Daily at 8 AM
+      description: "Emerging Threats firewall rules"
+      indicators: ["malicious_ips", "suspicious_domains"]
+      files:
+        - "emerging-Block-IPs.txt"
+        - "emerging-compromised.rules"
+        - "emerging-botcc.rules"
+      
+    misp_public:
+      enabled: false  # Enable if you have access
+      url: "https://misp-public.circl.lu/"
+      type: misp_api
+      priority: high
+      api_key_required: true
+      description: "MISP public instance"
+      indicators: ["all_types"]
+      
+    opencti_public:
+      enabled: false  # Enable if configured
+      url: "https://demo.opencti.io/"
+      type: opencti_api
+      priority: medium
+      api_key_required: true
+      description: "OpenCTI threat intelligence platform"
 
-  # External Commercial Sources  
+  # External Commercial Sources - Updated 2025
   external_commercial:
     virustotal:
       enabled: false  # Requires API key
       url: "https://www.virustotal.com/vtapi/v2/"
+      api_version: "v3"  # Updated to v3 API
+      url_v3: "https://www.virustotal.com/api/v3/"
       type: api
       priority: high
-      rate_limit: "4/minute"  # Free tier
+      rate_limit: "4/minute"  # Free tier, premium has higher limits
       api_key_required: true
       description: "Multi-antivirus scanning service"
       indicators: ["file_hashes", "urls", "domains", "ips"]
+      features:
+        - "file_scan"
+        - "url_scan"
+        - "domain_resolution"
+        - "ip_reputation"
+        - "comments"
+        - "votes"
       
     otx_alienvault:
       enabled: false  # Requires API key
       url: "https://otx.alienvault.com/api/v1/"
       type: api
       priority: high
-      rate_limit: "1000/hour"
+      rate_limit: "10000/hour"  # Updated limits
       api_key_required: true
       description: "Open Threat Exchange community platform"
       indicators: ["pulses", "indicators", "malware_families"]
+      endpoints:
+        - "indicators/domain"
+        - "indicators/IPv4"
+        - "indicators/file"
+        - "pulses/subscribed"
       
     shodan:
       enabled: false  # Requires API key
@@ -100,190 +167,604 @@ sources:
       rate_limit: "100/month"  # Free tier
       api_key_required: true
       description: "Internet-connected device scanning"
-      indicators: ["ip_intelligence", "certificates", "services"]
+      indicators: ["ip_intelligence", "certificates", "services", "vulnerabilities"]
+      features:
+        - "host_lookup"
+        - "search"
+        - "scan"
+        - "honeyscore"
+      
+    hybrid_analysis:
+      enabled: false  # Requires API key
+      url: "https://www.hybrid-analysis.com/api/v2/"
+      type: api
+      priority: high
+      rate_limit: "200/hour"  # Free tier
+      api_key_required: true
+      description: "Malware analysis sandbox"
+      indicators: ["file_hashes", "behavioral_analysis"]
+      
+    recordedfuture:
+      enabled: false  # Commercial license required
+      url: "https://api.recordedfuture.com/v2/"
+      type: api
+      priority: high
+      api_key_required: true
+      description: "Real-time threat intelligence"
+      indicators: ["all_types", "risk_scores"]
+      
+    threatlabs:
+      enabled: false  # Commercial
+      url: "https://api.riskiq.net/v1/"
+      type: api
+      priority: medium
+      api_key_required: true
+      description: "PassiveTotal and RiskIQ threat data"
 
-  # Regional Sources
+  # Regional Sources - Updated for 2025
   regional:
     id_cert:
       enabled: true
       url: "https://www.cert.or.id/advisories"
+      backup_url: "https://csirt.go.id/advisory"
       type: scraper
       priority: high
-      update_frequency: "0 9 * * *"  # Daily at 9 AM
+      update_frequency: "0 9,21 * * *"  # Twice daily
       description: "Indonesian CERT security advisories"
-      indicators: ["advisories", "iocs"]
+      indicators: ["advisories", "iocs", "campaigns"]
+      scraper_config:
+        user_agent: "Rekap-ThreatIntel/2025"
+        timeout: 30
+        max_pages: 10
       
     bssn_alerts:
       enabled: true
-      type: manual
+      url: "https://bssn.go.id/category/siaran-pers/"
+      type: scraper
       priority: high
-      description: "Indonesian National Cyber Security Agency threat alerts"
+      update_frequency: "0 10,22 * * *"
+      description: "Indonesian National Cyber Security Agency alerts"
       validation_required: false
+      
+    apnic_threats:
+      enabled: true
+      url: "https://stats.apnic.net/cgi-bin/aspd"
+      type: api
+      priority: medium
+      update_frequency: "0 12 * * *"  # Daily
+      description: "APNIC region threat statistics"
+      
+    team_cymru:
+      enabled: true
+      url: "https://www.team-cymru.org/bogon-reference-http.html"
+      type: text_download
+      priority: low
+      update_frequency: "0 6 * * 1"  # Weekly on Monday
+      description: "Team Cymru bogon list"
+      
+    spamhaus:
+      enabled: true
+      url: "https://www.spamhaus.org/drop/drop.txt"
+      type: text_download
+      priority: medium
+      update_frequency: "0 */8 * * *"  # Every 8 hours
+      description: "Spamhaus DROP list"
+      indicators: ["malicious_ips"]
 
-# Data validation rules
+# Data validation rules - Enhanced for 2025
 validation:
   ip_address:
-    regex: "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"
-    required_fields: ["ip", "type", "confidence", "first_seen"]
+    regex: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+    ipv6_regex: "^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$"
+    required_fields: ["ip", "type", "confidence", "first_seen", "source"]
     confidence_levels: ["low", "medium", "high"]
+    excluded_ranges:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+      - "127.0.0.0/8"
+      - "169.254.0.0/16"
+      - "224.0.0.0/4"
     
   domain:
     regex: "^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$"
-    required_fields: ["domain", "type", "confidence", "first_seen"]
-    blacklist_tlds: [".test", ".localhost", ".invalid"]
+    punycode_support: true
+    required_fields: ["domain", "type", "confidence", "first_seen", "source"]
+    blacklist_tlds: [".test", ".localhost", ".invalid", ".example"]
+    suspicious_tlds: [".tk", ".ml", ".ga", ".cf", ".click", ".download"]
+    max_length: 253
+    min_length: 4
     
   hash:
-    md5_regex: "^[a-fA-F0-9]{32}$"
-    sha1_regex: "^[a-fA-F0-9]{40}$" 
-    sha256_regex: "^[a-fA-F0-9]{64}$"
-    required_fields: ["hash", "malware_family", "confidence", "first_seen"]
+    algorithms:
+      md5:
+        regex: "^[a-fA-F0-9]{32}$"
+        required: true
+      sha1:
+        regex: "^[a-fA-F0-9]{40}$"
+        required: true
+      sha256:
+        regex: "^[a-fA-F0-9]{64}$"
+        required: true
+        preferred: true
+      sha384:
+        regex: "^[a-fA-F0-9]{96}$"
+        required: false
+      sha512:
+        regex: "^[a-fA-F0-9]{128}$"
+        required: false
+    required_fields: ["hash", "algorithm", "malware_family", "confidence", "first_seen", "source"]
     
   url:
     regex: "^https?://[^\\s/$.?#].[^\\s]*$"
-    required_fields: ["url", "type", "confidence", "first_seen"]
+    required_fields: ["url", "type", "confidence", "first_seen", "source"]
     max_length: 2048
+    schemes: ["http", "https", "ftp", "ftps"]
+    decode_url_encoding: true
+    extract_domain: true
+    
+  email:
+    regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    required_fields: ["email", "type", "confidence", "first_seen", "source"]
+    extract_domain: true
 
-# Confidence scoring system
+# Enhanced confidence scoring system - 2025
 confidence_scoring:
   high:
-    description: "Verified through multiple sources or direct analysis"
+    description: "Verified through multiple sources, confirmed malicious activity, or direct analysis"
     score_range: [80, 100]
     auto_approve: true
+    minimum_sources: 2
+    decay_rate: "30 days"  # Confidence decays over time
     
   medium:
-    description: "Single reliable source or indirect evidence"  
+    description: "Single reliable source, indirect evidence, or community reports"  
     score_range: [50, 79]
     auto_approve: true
+    minimum_sources: 1
+    decay_rate: "14 days"
     
   low:
-    description: "Unverified report or automated detection"
+    description: "Unverified reports, automated detection, or suspicious patterns"
     score_range: [1, 49]
     auto_approve: false
+    review_required: true
+    decay_rate: "7 days"
+    
+  factors:
+    source_reputation:
+      trusted_feeds: +20
+      community_verified: +15
+      honeypot_confirmed: +25
+      sandbox_analysis: +20
+    
+    age_penalty:
+      "30_days": -5
+      "90_days": -10
+      "180_days": -20
+      "365_days": -30
+    
+    validation_bonus:
+      multiple_sources: +15
+      technical_analysis: +20
+      campaign_attribution: +10
 
-# Update scheduling
+# Update scheduling - Modern cron expressions
 scheduling:
   timezone: "Asia/Jakarta"
   
+  high_frequency:  # Critical sources
+    frequency: "*/15 * * * *"  # Every 15 minutes
+    sources: ["honeypot_network", "incident_response"]
+    
+  medium_frequency:  # Important feeds
+    frequency: "0 */2 * * *"  # Every 2 hours
+    sources: ["malwarebazaar", "feodo_tracker", "phishtank"]
+    
+  low_frequency:  # Less critical
+    frequency: "0 */6 * * *"  # Every 6 hours
+    sources: ["threatfox", "urlhaus", "emergingthreats"]
+    
   daily_updates:
-    - time: "08:00"
-      sources: ["malwarebazaar", "feodo_tracker", "threatfox"]
-    - time: "20:00" 
-      sources: ["urlhaus", "id_cert"]
+    - time: "06:00"
+      sources: ["id_cert", "bssn_alerts"]
+      priority: "high"
+    - time: "14:00" 
+      sources: ["spamhaus", "team_cymru"]
+      priority: "medium"
+    - time: "22:00"
+      sources: ["apnic_threats"]
+      priority: "low"
       
   weekly_reports:
     day: "sunday"
-    time: "10:00"
+    time: "09:00"
+    include_statistics: true
+    include_trends: true
     
   monthly_analysis:
     day: 1
-    time: "12:00"
+    time: "10:00"
+    deep_analysis: true
+    campaign_tracking: true
     
   emergency_updates:
     enabled: true
     max_frequency: "*/5 * * * *"  # Every 5 minutes max
+    triggers:
+      - "high_confidence_campaign"
+      - "critical_infrastructure_threat"
+      - "zero_day_exploit"
 
-# Data retention policies
+# Enhanced data retention policies
 retention:
   iocs:
-    active_threats: "2 years"
-    historical_data: "5 years"
-    unverified_reports: "6 months"
+    active_threats: "3 years"  # Extended retention
+    historical_data: "7 years"
+    unverified_reports: "1 year"  # Increased from 6 months
+    expired_certificates: "2 years"
     
   logs:
-    application_logs: "90 days"
-    audit_logs: "1 year"
-    error_logs: "6 months"
+    application_logs: "180 days"  # Increased
+    audit_logs: "2 years"
+    error_logs: "1 year"
+    performance_logs: "90 days"
     
   reports:
-    weekly_reports: "2 years"
-    monthly_analysis: "5 years" 
-    incident_reports: "7 years"
+    weekly_reports: "3 years"
+    monthly_analysis: "7 years" 
+    incident_reports: "10 years"  # Regulatory compliance
+    campaign_analysis: "5 years"
+    
+  backups:
+    frequency: "daily"
+    retention: "90 days"
+    compression: true
+    encryption: true
 
-# Export configurations
+# Modern export configurations
 export:
   formats:
     stix:
       version: "2.1"
       enabled: true
+      include_relationships: true
+      bundle_format: true
       
     misp:
       enabled: true
       galaxy_mapping: true
+      taxonomies: true
+      sharing_group_id: 1
       
     csv:
       enabled: true
       delimiter: ","
       encoding: "utf-8"
+      include_headers: true
       
     json:
       enabled: true
       pretty_print: true
+      compression: false
+      
+    yaml:
+      enabled: true
+      flow_style: false
+      
+    xml:
+      enabled: false
+      schema_validation: true
       
   destinations:
     local_files:
       enabled: true
       path: "exports/"
+      filename_template: "rekap_export_{timestamp}_{format}"
+      
+    cloud_storage:
+      enabled: false
+      provider: "s3"  # s3, gcs, azure
+      bucket: "rekap-threat-intel"
+      encryption: true
       
     api_endpoints:
       enabled: false
-      urls: []
+      endpoints: []
+      authentication: "bearer"
       
     siem_integration:
       enabled: false
       format: "json"
       endpoint: ""
+      batch_size: 1000
+      
+    webhook_delivery:
+      enabled: false
+      endpoints: []
+      retry_attempts: 3
+      timeout: 30
 
-# Notification settings
+# Enhanced notification settings
 notifications:
-  high_confidence_threats:
-    enabled: true
-    channels: ["email", "telegram", "slack"]
-    threshold: "high"
-    
-  new_campaigns:
-    enabled: true
-    channels: ["email", "discord"]
-    
-  system_alerts:
-    enabled: true
-    channels: ["email"]
-    types: ["api_errors", "source_failures", "data_corruption"]
-    
-  weekly_summary:
-    enabled: true
-    channels: ["email"]
-    day: "sunday"
-    time: "11:00"
+  channels:
+    email:
+      enabled: true
+      smtp_server: "smtp.gmail.com"
+      smtp_port: 587
+      use_tls: true
+      templates_path: "templates/email/"
+      
+    slack:
+      enabled: false
+      webhook_url: ""
+      channel: "#threat-intel"
+      username: "Rekap Bot"
+      emoji: ":warning:"
+      
+    discord:
+      enabled: false
+      webhook_url: ""
+      username: "Rekap Threat Intel"
+      avatar_url: ""
+      
+    telegram:
+      enabled: false
+      bot_token: ""
+      chat_id: ""
+      parse_mode: "Markdown"
+      
+    teams:
+      enabled: false
+      webhook_url: ""
+      card_template: "adaptive"
+      
+    webhook:
+      enabled: false
+      endpoints: []
+      headers:
+        "Content-Type": "application/json"
+        "User-Agent": "Rekap-Notifications/2025"
+  
+  triggers:
+    high_confidence_threats:
+      enabled: true
+      channels: ["email", "slack", "telegram"]
+      threshold: "high"
+      rate_limit: "10/hour"
+      
+    new_campaigns:
+      enabled: true
+      channels: ["email", "discord"]
+      minimum_iocs: 5
+      
+    critical_infrastructure:
+      enabled: true
+      channels: ["email", "slack", "teams"]
+      keywords: ["scada", "ics", "power", "water", "banking"]
+      
+    apt_indicators:
+      enabled: true
+      channels: ["email"]
+      attribution_confidence: "medium"
+      
+    zero_day_exploits:
+      enabled: true
+      channels: ["email", "slack", "discord", "telegram"]
+      priority: "critical"
+      
+    system_alerts:
+      enabled: true
+      channels: ["email"]
+      types: ["api_errors", "source_failures", "data_corruption", "disk_space"]
+      
+    weekly_summary:
+      enabled: true
+      channels: ["email"]
+      day: "sunday"
+      time: "10:00"
+      include_charts: true
+      
+    monthly_report:
+      enabled: true
+      channels: ["email"]
+      day: 1
+      time: "09:00"
+      detailed_analysis: true
 
-# Integration settings
+# Modern integration settings
 integrations:
   siem:
     splunk:
       enabled: false
       hec_endpoint: ""
       hec_token: ""
+      index: "threat_intel"
+      source_type: "rekap:json"
       
-    elk:
+    elastic:
       enabled: false
-      elasticsearch_host: ""
-      index_pattern: "rekap-threat-intel-*"
+      elasticsearch_hosts: ["localhost:9200"]
+      index_pattern: "rekap-threat-intel-{date}"
+      document_type: "_doc"
+      
+    qradar:
+      enabled: false
+      api_endpoint: ""
+      security_token: ""
+      log_source_id: ""
+      
+    sentinel:
+      enabled: false
+      workspace_id: ""
+      shared_key: ""
+      log_type: "RekapThreatIntel"
+      
+  soar:
+    phantom:
+      enabled: false
+      server_url: ""
+      auth_token: ""
+      playbook_trigger: true
+      
+    demisto:
+      enabled: false
+      server_url: ""
+      api_key: ""
+      incident_type: "Threat Intelligence"
       
   ticketing:
     jira:
       enabled: false
+      server_url: ""
+      username: ""
+      api_token: ""
+      project_key: "THREAT"
+      
+    servicenow:
+      enabled: false
+      instance_url: ""
+      username: ""
+      password: ""
+      table: "incident"
+      
+  threat_sharing:
+    misp:
+      enabled: false
       url: ""
-      project_key: ""
+      auth_key: ""
+      sharing_group: "Rekap Community"
       
-  chat:
-    slack:
+    opencti:
       enabled: false
-      webhook_url: ""
+      url: ""
+      token: ""
+      marking_definition: "TLP:WHITE"
       
-    discord:
+    taxii:
       enabled: false
-      webhook_url: ""
-      
-    telegram:
-      enabled: false
-      bot_token: ""
-      chat_id: ""
+      discovery_url: ""
+      username: ""
+      password: ""
+      collection_id: ""
+
+# Performance and scaling settings
+performance:
+  database:
+    connection_pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+    pool_recycle: 3600
+    
+  caching:
+    enabled: true
+    backend: "redis"  # redis, memcached, memory
+    redis_url: "redis://localhost:6379/0"
+    default_ttl: 3600
+    max_memory: "1gb"
+    
+  rate_limiting:
+    enabled: true
+    storage: "redis"
+    per_ip: "100/hour"
+    per_api_key: "1000/hour"
+    burst_limit: 10
+    
+  async_processing:
+    enabled: true
+    worker_count: 4
+    queue_backend: "redis"
+    max_retries: 3
+    retry_delay: 60
+
+# Security settings - Enhanced for 2025
+security:
+  api_keys:
+    rotation_enabled: true
+    rotation_interval: "90 days"
+    min_length: 32
+    complexity_required: true
+    
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+    key_derivation: "PBKDF2"
+    iterations: 100000
+    
+  authentication:
+    methods: ["api_key", "jwt", "oauth2"]
+    jwt_secret_key: ""  # Set in environment
+    jwt_expiration: "24 hours"
+    
+  rate_limiting:
+    failed_attempts: 5
+    lockout_duration: "15 minutes"
+    progressive_delay: true
+    
+  audit_logging:
+    enabled: true
+    log_level: "INFO"
+    include_request_body: false
+    retention: "1 year"
+    
+  input_validation:
+    strict_mode: true
+    sanitize_input: true
+    max_request_size: "10MB"
+    allowed_file_types: [".json", ".csv", ".txt", ".yaml"]
+
+# Machine learning and analytics - New for 2025
+ml_analytics:
+  enabled: false  # Enable when ML models are available
+  
+  threat_scoring:
+    model_path: "models/threat_scoring.pkl"
+    features: ["source_reputation", "age", "frequency", "geolocation"]
+    retrain_interval: "weekly"
+    
+  anomaly_detection:
+    model_type: "isolation_forest"
+    sensitivity: 0.1
+    min_samples: 100
+    
+  campaign_clustering:
+    algorithm: "dbscan"
+    eps: 0.5
+    min_samples: 5
+    features: ["ttps", "infrastructure", "timing"]
+    
+  predictive_analysis:
+    enabled: false
+    model_type: "lstm"
+    prediction_horizon: "7 days"
+    confidence_threshold: 0.8
+
+# Quality assurance
+quality_assurance:
+  data_validation:
+    enabled: true
+    strict_mode: false
+    auto_correction: true
+    
+  false_positive_detection:
+    enabled: true
+    whitelist_sources: ["google.com", "microsoft.com", "amazon.com"]
+    confidence_threshold: 0.9
+    
+  duplicate_detection:
+    enabled: true
+    similarity_threshold: 0.95
+    merge_duplicates: true
+    
+  data_enrichment:
+    enabled: true
+    external_sources: ["virustotal", "shodan", "whois"]
+    cache_enrichment: true
+    
+  monitoring:
+    health_checks: true
+    performance_metrics: true
+    alert_thresholds:
+      error_rate: 0.05
+      response_time: 5000  # milliseconds
+      queue_size: 1000

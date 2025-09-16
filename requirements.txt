@@ -1,66 +1,63 @@
-# Rekap - Indonesia Threat Intelligence Repository
-# Updated Dependencies for 2025
+#Rekap - Indonesia Threat Intelligence Repository
+#Updated Dependencies for 2025
 
-# Core HTTP and networking
-requests==2.32.3
-urllib3==2.2.3
-httpx==0.27.0  # Modern async HTTP client
+#Core HTTP and Networking
+requests==2.32.3        # Reliable HTTP requests library
+urllib3==2.5.0         # Latest stable HTTP client dependency
+httpx==0.27.0          # Modern async HTTP client
 
-# DNS and domain analysis
-dnspython==2.6.1
-python-whois==0.9.27
-publicsuffix2==2.20240905
+#DNS and Domain Analysis
+dnspython==2.6.1       # DNS toolkit
+python-whois==0.9.5    # Latest available WHOIS lookup
+publicsuffix2==2.20191221  # Latest available public suffix list
 
-# Data processing and validation
-pydantic==2.8.2  # Modern data validation
-validators==0.33.0
-ipaddress  # Built-in, but keeping for explicit dependency
+#Data Processing and Validation
+pydantic==2.11.9       # Modern data validation
+validators==0.35.0     # Simple data validation
+ipaddress              # Built-in, explicit dependency for IP handling
 
-# File I/O and data formats
-pyyaml==6.0.2
-python-dotenv==1.0.1  # For .env file handling
-toml==0.10.2
+#File I/O and Data Formats
+pyyaml==6.0.2          # YAML file handling
+python-dotenv==1.0.1   # Environment variable management
+toml==0.10.2           # TOML file support
 
-# CLI and user interface
-click==8.1.7  # Modern CLI framework (replacement for argparse)
-rich==13.8.1  # Beautiful terminal output
-typer==0.12.5  # Type-based CLI framework
+#CLI and User Interface
+click==8.2.1           # Modern CLI framework
+rich==13.8.1           # Enhanced terminal output
+typer==0.12.5          # Type-based CLI framework
 
-# Progress and visualization
-tqdm==4.66.5
-tabulate==0.9.0
-colorama==0.4.6
+#Progress and Visualization
+tqdm==4.66.5           # Progress bar utility
+tabulate==0.9.0        # Table formatting
+colorama==0.4.6        # Cross-platform colored terminal text
 
-# Async and performance
-asyncio  # Built-in
-aiohttp==3.10.8
-aiofiles==24.1.0
+#Async and Performance
+asyncio                # Built-in, async I/O framework
+aiohttp==3.10.8        # Async HTTP client/server
+aiofiles==24.1.0       # Async file I/O
 
-# Security and hashing
-cryptography==42.0.8
-hashlib  # Built-in
-certifi==2024.8.30
+#Security and Hashing
+cryptography==45.0.7   # Cryptographic utilities
+certifi==2025.8.3      # SSL certificate verification
 
-# Date and time handling
-python-dateutil==2.9.0
-pytz==2024.2
+#Date and Time Handling
+python-dateutil==2.9.0 # Date and time utilities
+pytz==2025.2           # Timezone support
 
-# Optional: Database support
-sqlite3  # Built-in
-sqlalchemy==2.0.35  # If using database features
+#Optional: Database Support
+sqlalchemy==2.0.35     # Database ORM and querying
+#Optional: API Integrations
+vt-py==0.21.0          # VirusTotal Python SDK
+OTXv2==1.5.12          # AlienVault OTX SDK
+shodan==1.31.0         # Shodan API client
 
-# Optional: API integrations
-vt-py==0.18.4  # VirusTotal Python SDK
-otx-python-sdk==1.5.12  # AlienVault OTX SDK
-shodan==1.31.0
+#Development and Testing (Optional)
+pytest==8.4.2          # Testing framework
+pytest-asyncio==0.24.0 # Async testing support
+black==24.8.0          # Code formatter
+flake8==7.3.0          # Code linter
+mypy==1.18.1           # Static type checker
 
-# Development and testing (optional)
-pytest==8.3.3
-pytest-asyncio==0.24.0
-black==24.8.0
-flake8==7.1.1
-mypy==1.11.2
-
-# Logging and monitoring
-structlog==24.4.0
-python-json-logger==2.0.7
+#Logging and Monitoring
+structlog==25.4.0      # Structured logging
+python-json-logger==3.3.0  # JSON logging support

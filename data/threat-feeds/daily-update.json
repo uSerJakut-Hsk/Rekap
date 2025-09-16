@@ -1,0 +1,124 @@
+{
+  "feed_info": {
+    "name": "Rekap Daily Threat Update",
+    "version": "1.0",
+    "date": "2024-09-16",
+    "timestamp": "2024-09-16T08:00:00Z",
+    "next_update": "2024-09-17T08:00:00Z",
+    "total_new_indicators": 12
+  },
+  "new_threats": {
+    "malicious_ips": [
+      {
+        "ip": "103.245.167.89",
+        "type": "c2_server",
+        "malware_family": "njrat",
+        "confidence": "high",
+        "first_seen": "2024-09-16T03:22:00Z",
+        "country": "ID",
+        "tags": ["rat", "remote_access"],
+        "description": "NjRAT C2 server targeting Indonesian users"
+      },
+      {
+        "ip": "45.89.173.245",
+        "type": "phishing_host",
+        "confidence": "medium",
+        "first_seen": "2024-09-16T05:15:00Z",
+        "country": "RU",
+        "tags": ["phishing", "credential_theft"],
+        "description": "Hosting phishing pages impersonating local banks"
+      }
+    ],
+    "malicious_domains": [
+      {
+        "domain": "bni-mobile-security.net",
+        "type": "phishing",
+        "target": "banking",
+        "confidence": "high",
+        "first_seen": "2024-09-16T02:30:00Z",
+        "registrar": "NameCheap",
+        "tags": ["phishing", "bni_impersonation"],
+        "description": "Phishing site impersonating BNI mobile banking"
+      },
+      {
+        "domain": "mandiri-token-update.org",
+        "type": "phishing",
+        "target": "banking",
+        "confidence": "high",
+        "first_seen": "2024-09-16T04:45:00Z",
+        "registrar": "GoDaddy",
+        "tags": ["phishing", "mandiri_impersonation"],
+        "description": "Fake Mandiri token update portal"
+      },
+      {
+        "domain": "whatsapp-web-update.info",
+        "type": "malware_distribution",
+        "target": "general",
+        "confidence": "medium",
+        "first_seen": "2024-09-16T06:10:00Z",
+        "registrar": "Namecheap",
+        "tags": ["malware_dropper", "whatsapp_impersonation"],
+        "description": "Fake WhatsApp Web update distributing RAT"
+      }
+    ],
+    "file_hashes": [
+      {
+        "md5": "8b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e",
+        "sha1": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
+        "sha256": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+        "malware_family": "remcos",
+        "file_type": "executable",
+        "confidence": "high",
+        "first_seen": "2024-09-16T01:15:00Z",
+        "tags": ["rat", "keylogger"],
+        "description": "RemcosRAT variant with enhanced evasion"
+      }
+    ]
+  },
+  "campaign_updates": [
+    {
+      "campaign_name": "Indonesian Banking Phishing Wave",
+      "status": "active",
+      "start_date": "2024-09-10",
+      "targets": ["BNI", "Mandiri", "BCA", "BRI"],
+      "tactics": ["phishing", "social_engineering"],
+      "new_indicators": 8,
+      "threat_level": "high",
+      "description": "Coordinated phishing campaign targeting major Indonesian banks"
+    }
+  ],
+  "trending_threats": [
+    {
+      "threat_type": "phishing",
+      "target_sector": "banking",
+      "increase_percentage": 45,
+      "period": "last_7_days",
+      "primary_vectors": ["SMS", "email", "social_media"]
+    },
+    {
+      "threat_type": "cryptominer",
+      "target_sector": "general",
+      "increase_percentage": 23,
+      "period": "last_7_days",
+      "primary_vectors": ["compromised_websites", "malicious_ads"]
+    }
+  ],
+  "mitigation_advice": [
+    {
+      "threat": "Indonesian Banking Phishing",
+      "recommendations": [
+        "Block newly identified phishing domains",
+        "Implement email security filters for banking-related terms",
+        "User awareness training on banking phishing tactics",
+        "Monitor for typosquatting domains of local banks"
+      ]
+    }
+  ],
+  "sources": [
+    "community_reports",
+    "honeypots",
+    "sandbox_analysis",
+    "threat_hunting",
+    "external_feeds"
+  ]
+}

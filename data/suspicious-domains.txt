@@ -1,0 +1,62 @@
+# Suspicious Domains Database
+# Format: domain:category:confidence:date_added:description
+#
+# Categories: phishing, malware, c2, typosquatting, suspicious_new
+# Confidence: high, medium, low
+#
+
+# ===== PHISHING DOMAINS =====
+secure-bank-update.com:phishing:high:2024-09-11:Fake banking update targeting Indonesian banks
+covid-relief-gov.net:phishing:high:2024-09-09:Fake government COVID relief program
+microsoft-update-center.org:phishing:medium:2024-09-13:Fake Microsoft update portal
+paypal-security-check.net:phishing:high:2024-09-14:PayPal phishing site
+amazon-prime-renewal.org:phishing:medium:2024-09-10:Amazon Prime fake renewal
+google-drive-share.info:phishing:high:2024-09-15:Fake Google Drive sharing page
+apple-id-verification.biz:phishing:high:2024-09-08:Apple ID phishing portal
+netflix-account-update.co:phishing:medium:2024-09-12:Netflix account phishing
+facebook-security-alert.net:phishing:high:2024-09-07:Facebook security alert scam
+
+# ===== MALWARE DISTRIBUTION =====
+download-office.net:malware:high:2024-09-12:Fake Office installer with trojan
+adobe-flash-update.org:malware:high:2024-09-06:Flash update distributing malware
+chrome-browser-update.info:malware:medium:2024-09-13:Fake Chrome update
+windows-security-update.biz:malware:high:2024-09-09:Fake Windows security update
+free-antivirus-download.co:malware:medium:2024-09-11:Fake antivirus with malware
+java-update-required.net:malware:high:2024-09-14:Fake Java update portal
+
+# ===== C2 SERVERS =====
+api-update-server.com:c2:high:2024-09-10:Emotet C2 communication
+secure-connection-test.net:c2:medium:2024-09-08:RAT C2 server
+system-health-check.org:c2:high:2024-09-15:TrickBot C2 infrastructure
+network-diagnostic-tool.info:c2:medium:2024-09-07:Generic C2 server
+remote-support-center.biz:c2:high:2024-09-13:AsyncRAT C2 server
+
+# ===== TYPOSQUATTING =====
+gooogle.com:typosquatting:high:2024-09-05:Google typosquatting
+micorsoft.com:typosquatting:medium:2024-09-06:Microsoft typosquatting
+payapl.com:typosquatting:high:2024-09-09:PayPal typosquatting
+amazom.com:typosquatting:medium:2024-09-11:Amazon typosquatting
+facebok.com:typosquatting:high:2024-09-14:Facebook typosquatting
+githib.com:typosquatting:medium:2024-09-12:GitHub typosquatting
+youtibe.com:typosquatting:low:2024-09-08:YouTube typosquatting
+
+# ===== SUSPICIOUS NEW DOMAINS =====
+bank-indonesia-official.net:suspicious_new:medium:2024-09-16:Suspicious BI impersonation
+government-id-portal.org:suspicious_new:high:2024-09-15:Fake government ID portal
+covid-vaccination-booking.co:suspicious_new:medium:2024-09-14:COVID vaccination booking scam
+tax-refund-indonesia.info:suspicious_new:high:2024-09-13:Tax refund scam targeting Indonesians
+scholarship-program-2024.net:suspicious_new:medium:2024-09-12:Fake scholarship program
+crypto-mining-pool.biz:suspicious_new:low:2024-09-10:Suspicious crypto mining site
+
+# ===== COMPROMISED LEGITIMATE SITES =====
+oldwebsite123.com/wp-content/uploads/:malware:high:2024-09-11:Compromised WordPress hosting malware
+legitbusiness.co.id/images/temp/:phishing:medium:2024-09-09:Compromised local business site
+university-old.ac.id/assets/js/:malware:high:2024-09-13:Compromised university website
+localshop.net.id/cache/:c2:medium:2024-09-10:Compromised local e-commerce site
+
+# ===== ACTIVE MONITORING =====
+# These domains are under active monitoring
+suspicious-activity-today.com:suspicious_new:low:2024-09-16:Under investigation
+new-threat-vector.net:suspicious_new:medium:2024-09-16:Recently registered, monitoring
+potential-phishing-site.org:suspicious_new:low:2024-09-15:Low confidence, monitoring
+emerging-threat-domain.info:suspicious_new:medium:2024-09-15:Emerging threat indicator

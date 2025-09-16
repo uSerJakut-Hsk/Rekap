@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2024-09-16T10:30:00Z",
+    "total_iocs": 150,
+    "sources": ["manual_analysis", "public_feeds", "community_reports"]
+  },
+  "malicious_ips": [
+    {
+      "ip": "185.220.101.182",
+      "type": "c2_server",
+      "malware_family": "emotet",
+      "confidence": "high",
+      "first_seen": "2024-09-10",
+      "last_seen": "2024-09-15",
+      "country": "RU",
+      "tags": ["banking_trojan", "botnet"],
+      "description": "Emotet C2 server observed in recent campaigns"
+    },
+    {
+      "ip": "45.142.214.123",
+      "type": "malware_host",
+      "malware_family": "trickbot",
+      "confidence": "high",
+      "first_seen": "2024-09-12",
+      "last_seen": "2024-09-16",
+      "country": "NL",
+      "tags": ["banking_trojan", "credential_stealer"],
+      "description": "TrickBot payload hosting server"
+    },
+    {
+      "ip": "194.31.98.124",
+      "type": "phishing_host",
+      "malware_family": "generic_phishing",
+      "confidence": "medium",
+      "first_seen": "2024-09-08",
+      "last_seen": "2024-09-14",
+      "country": "DE",
+      "tags": ["phishing", "credential_harvesting"],
+      "description": "Hosting fake banking login pages"
+    }
+  ],
+  "malicious_domains": [
+    {
+      "domain": "secure-bank-update.com",
+      "type": "phishing",
+      "target": "banking",
+      "confidence": "high",
+      "first_seen": "2024-09-11",
+      "registrar": "NameCheap",
+      "tags": ["phishing", "banking"],
+      "description": "Fake banking update page targeting Indonesian banks"
+    },
+    {
+      "domain": "covid-relief-gov.net",
+      "type": "phishing",
+      "target": "government",
+      "confidence": "high",
+      "first_seen": "2024-09-09",
+      "registrar": "GoDaddy",
+      "tags": ["phishing", "social_engineering"],
+      "description": "Fake government relief program site"
+    },
+    {
+      "domain": "microsoft-update-center.org",
+      "type": "malware_distribution",
+      "target": "general",
+      "confidence": "medium",
+      "first_seen": "2024-09-13",
+      "registrar": "Namecheap",
+      "tags": ["malware_dropper", "brand_impersonation"],
+      "description": "Fake Microsoft update site distributing malware"
+    }
+  ],
+  "malicious_urls": [
+    {
+      "url": "https://bit.ly/3x4mpl3",
+      "type": "shortened_malicious",
+      "redirect_to": "http://malicious-site.com/payload.exe",
+      "confidence": "high",
+      "first_seen": "2024-09-14",
+      "tags": ["url_shortener", "malware_download"],
+      "description": "Shortened URL redirecting to malware payload"
+    },
+    {
+      "url": "http://download-office.net/setup.exe",
+      "type": "malware_download",
+      "file_hash": "d41d8cd98f00b204e9800998ecf8427e",
+      "confidence": "high",
+      "first_seen": "2024-09-12",
+      "tags": ["fake_software", "trojan_dropper"],
+      "description": "Fake Office installer containing trojan"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+# Rekap API Keys Configuration
+# Copy this file to api-keys.env and fill in your actual API keys
+# Never commit api-keys.env to version control!
+
+# VirusTotal API Key
+# Get from: https://www.virustotal.com/gui/my-apikey
+VIRUSTOTAL_API_KEY=your_virustotal_api_key_here
+
+# AlienVault OTX API Key  
+# Get from: https://otx.alienvault.com/api
+OTX_API_KEY=your_otx_api_key_here
+
+# Shodan API Key
+# Get from: https://account.shodan.io/
+SHODAN_API_KEY=your_shodan_api_key_here
+
+# URLVoid API Key
+# Get from: https://www.urlvoid.com/api/
+URLVOID_API_KEY=your_urlvoid_api_key_here
+
+# Hybrid Analysis API Key  
+# Get from: https://www.hybrid-analysis.com/apikeys/info
+HYBRID_ANALYSIS_API_KEY=your_hybrid_analysis_key_here
+
+# ThreatCrowd API (No key required, but rate limited)
+# THREATCROWD_API_URL=https://www.threatcrowd.org/searchApi/v2/
+
+# MalwareBazaar API (No key required)
+# MALWAREBAZAAR_API_URL=https://mb-api.abuse.ch/api/v1/
+
+# Feodo Tracker API (No key required)
+# FEODO_API_URL=https://feodotracker.abuse.ch/downloads/
+
+# ThreatFox API (No key required)  
+# THREATFOX_API_URL=https://threatfox-api.abuse.ch/api/v1/
+
+# Custom threat feed URLs (if any)
+CUSTOM_FEED_URL_1=https://your-custom-feed.com/api/indicators
+CUSTOM_FEED_API_KEY_1=your_custom_feed_api_key
+
+# Database Configuration (if using external database)
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_NAME=rekap_threatintel
+# DB_USER=rekap_user
+# DB_PASSWORD=your_secure_password
+
+# Email Configuration (for alerts and reports)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+ALERT_EMAIL_TO=security-team@yourcompany.com
+
+# Telegram Bot Configuration (for notifications)
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+
+# Webhook URLs (for integrations)
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR/DISCORD/WEBHOOK
+
+# Rate Limiting Configuration
+API_RATE_LIMIT_PER_MINUTE=60
+API_BURST_LIMIT=10
+
+# Proxy Configuration (if needed)
+# HTTP_PROXY=http://proxy.company.com:8080
+# HTTPS_PROXY=https://proxy.company.com:8080
+# NO_PROXY=localhost,127.0.0.1,.company.com
+
+# Logging Configuration
+LOG_LEVEL=INFO
+LOG_FILE=logs/rekap.log
+MAX_LOG_SIZE_MB=100
+LOG_RETENTION_DAYS=30
+
+# Cache Configuration
+ENABLE_CACHING=true
+CACHE_TTL_HOURS=24
+REDIS_URL=redis://localhost:6379/0
+
+# Security Settings
+ENABLE_API_KEY_ROTATION=true
+API_KEY_ROTATION_DAYS=90
+ENABLE_REQUEST_SIGNING=true
+SECRET_KEY=your_secret_key_for_signing_requests

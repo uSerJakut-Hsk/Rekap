@@ -1,0 +1,146 @@
+{
+  "feed_sources": {
+    "internal": [
+      {
+        "name": "Rekap Community Reports",
+        "type": "community_submission",
+        "status": "active",
+        "update_frequency": "realtime",
+        "reliability": "medium",
+        "description": "User-submitted threat indicators from security community"
+      },
+      {
+        "name": "Rekap Honeypots",
+        "type": "honeypot_network",
+        "status": "active",
+        "update_frequency": "hourly",
+        "reliability": "high",
+        "description": "Internal honeypot network capturing live threats"
+      },
+      {
+        "name": "Incident Response Reports",
+        "type": "internal_analysis",
+        "status": "active",
+        "update_frequency": "as_needed",
+        "reliability": "high",
+        "description": "IOCs extracted from incident response activities"
+      }
+    ],
+    "external_free": [
+      {
+        "name": "AlienVault OTX",
+        "url": "https://otx.alienvault.com/api/v1/",
+        "type": "threat_intelligence",
+        "status": "active",
+        "update_frequency": "daily",
+        "reliability": "high",
+        "api_required": true,
+        "description": "Open Threat Exchange community platform"
+      },
+      {
+        "name": "URLVoid",
+        "url": "https://www.urlvoid.com/api/",
+        "type": "url_reputation",
+        "status": "active",
+        "update_frequency": "on_demand",
+        "reliability": "medium",
+        "api_required": true,
+        "description": "URL reputation checking service"
+      },
+      {
+        "name": "MalwareBazaar",
+        "url": "https://bazaar.abuse.ch/api/",
+        "type": "malware_samples",
+        "status": "active",
+        "update_frequency": "daily",
+        "reliability": "high",
+        "api_required": false,
+        "description": "Malware sample repository by abuse.ch"
+      },
+      {
+        "name": "Feodo Tracker",
+        "url": "https://feodotracker.abuse.ch/downloads/",
+        "type": "botnet_c2",
+        "status": "active",
+        "update_frequency": "daily",
+        "reliability": "high",
+        "api_required": false,
+        "description": "Botnet C2 tracking by abuse.ch"
+      }
+    ],
+    "external_commercial": [
+      {
+        "name": "VirusTotal",
+        "url": "https://www.virustotal.com/vtapi/v2/",
+        "type": "multi_av_scan",
+        "status": "active",
+        "update_frequency": "on_demand",
+        "reliability": "high",
+        "api_required": true,
+        "api_limits": "4_requests_per_minute",
+        "description": "Multi-antivirus scanning service"
+      },
+      {
+        "name": "Shodan",
+        "url": "https://api.shodan.io/",
+        "type": "internet_scanning",
+        "status": "active",
+        "update_frequency": "on_demand",
+        "reliability": "high",
+        "api_required": true,
+        "description": "Internet-connected device scanning"
+      }
+    ],
+    "regional_sources": [
+      {
+        "name": "ID-CERT Advisories",
+        "url": "https://www.cert.or.id/",
+        "type": "advisory_feed",
+        "status": "monitored",
+        "update_frequency": "weekly",
+        "reliability": "high",
+        "api_required": false,
+        "description": "Indonesian CERT security advisories"
+      },
+      {
+        "name": "BSSN Threat Alerts",
+        "type": "government_advisory",
+        "status": "monitored",
+        "update_frequency": "as_needed",
+        "reliability": "high",
+        "api_required": false,
+        "description": "Indonesian National Cyber Security Agency threat alerts"
+      }
+    ]
+  },
+  "data_quality": {
+    "validation_rules": [
+      {
+        "type": "ip_address",
+        "validation": "valid_ipv4_or_ipv6",
+        "required_fields": ["ip", "type", "confidence", "first_seen"]
+      },
+      {
+        "type": "domain",
+        "validation": "valid_domain_format",
+        "required_fields": ["domain", "type", "confidence", "first_seen"]
+      },
+      {
+        "type": "hash",
+        "validation": "valid_md5_sha1_sha256",
+        "required_fields": ["hash", "malware_family", "confidence", "first_seen"]
+      }
+    ],
+    "confidence_levels": {
+      "high": "Verified through multiple sources or direct analysis",
+      "medium": "Single reliable source or indirect evidence",
+      "low": "Unverified report or automated detection"
+    }
+  },
+  "update_schedule": {
+    "daily_feeds": ["08:00 UTC", "20:00 UTC"],
+    "weekly_reports": "Sunday 10:00 UTC",
+    "monthly_analysis": "1st day of month 12:00 UTC",
+    "emergency_updates": "As needed"
+  }
+}

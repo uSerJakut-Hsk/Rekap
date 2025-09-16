@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 Rekap Project
+Copyright (c) 2025 uSerJakut-Hsk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@ SOFTWARE.
 
 ADDITIONAL TERMS FOR THREAT INTELLIGENCE DATA:
 
-This license applies to the software code only. The threat intelligence data 
-(IOCs, malware signatures, etc.) provided in this repository is subject to 
+This license applies to the software code only. The threat intelligence data
+(IOCs, malware signatures, etc.) provided in this repository is subject to
 the following additional terms:
 
 1. USE RESTRICTION: The threat intelligence data may only be used for:
@@ -40,13 +40,13 @@ the following additional terms:
    - Development of offensive tools
    - Any illegal or harmful purposes
 
-3. NO WARRANTY: The threat intelligence data is provided "as-is" without 
-   warranty of any kind. Users are responsible for verifying data accuracy 
+3. NO WARRANTY: The threat intelligence data is provided "as-is" without
+   warranty of any kind. Users are responsible for verifying data accuracy
    before implementation.
 
-4. ATTRIBUTION: When redistributing or using significant portions of the 
-   threat intelligence data, attribution to the Rekap Project is appreciated 
-   but not required.
+4. ATTRIBUTION: When redistributing or using significant portions of the
+   threat intelligence data, attribution to the Rekap Project (uSerJakut-Hsk)
+   is appreciated but not required.
 
-By using this repository, you agree to these terms and acknowledge that 
+By using this repository, you agree to these terms and acknowledge that
 misuse of threat intelligence data may result in legal consequences.
